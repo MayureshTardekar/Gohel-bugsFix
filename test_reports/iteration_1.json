@@ -1,0 +1,32 @@
+{
+  "summary": "First-finish smoke test on Osteon Web3 NFT qualification app. Backend: 14/14 core endpoints work (register idempotent, referral increments, login, get_user with attempts/cooldown, tasks, questions without correct_index, test submit with score/cooldown 429, leaderboard sorted, admin login + auth via X-Admin-Token, add/delete questions). Frontend: landing loads with all sections, AuthModal registers user & closes, wallet badge in navbar, tasks toggle & sync toast, qualification test starts and navigates questions, referral copy button present, leaderboard renders, /admin login with correct credentials shows Users/Questions tabs and Export button. No blocking issues.",
+  "tested_scope": ["frontend", "backend", "auth", "integration"],
+  "passed": [
+    "GET /api/ health",
+    "POST /api/register creates user with referral_code",
+    "POST /api/register idempotent for same wallet",
+    "POST /api/register with referred_by increments referrer.referral_count to 1",
+    "POST /api/login unknown wallet returns 404",
+    "GET /api/user/{wallet} returns allowed_attempts=2 (1+refs), attempts_remaining, cooldown_seconds",
+    "POST /api/tasks/complete updates tasks",
+    "GET /api/questions returns 15 questions, no correct_index leaked, pass_score=70, total=100",
+    "POST /api/test/submit computes score and returns qualified flag",
+    "POST /api/test/submit returns 429 during cooldown",
+    "GET /api/leaderboard sorted by referral_count desc, best_score desc",
+    "Admin login rejects wrong creds (401), accepts osteon_admin/BoneMaster206",
+    "Admin endpoints require X-Admin-Token (401 without, 200 with)",
+    "Admin add + delete question",
+    "Frontend landing loads, all data-testids resolve",
+    "AuthModal flow registers new user and closes modal, wallet badge visible",
+    "Tasks sync -> Tasks synced toast",
+    "Qualification test starts, radio options render, prev/next navigation works",
+    "Referral copy button and Leaderboard table render",
+    "/admin login with correct creds unlocks Users(3)/Questions(15) tabs and Export CSV button"
+  ],
+  "failed": [],
+  "action_items": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "retest_needed": false,
+  "full_testing_deferred": true,
+  "notes": "test_credentials.md matches backend .env (BoneMaster206). Admin password in server.py default fallback was BoneMaster206! but actual env overrides to BoneMaster206 so no impact."
+}

@@ -1,0 +1,90 @@
+{
+  "responsive": {
+    "breakpoint": "Mobile-first baseline (360px-430px) with responsive scaling up to lg (1024px) and xl (1280px). Always style mobile layouts first without prefix, then apply sm:, md:, lg: overlays.",
+    "layout": "Single-column stacked structure on mobile devices (flex-col, grid-cols-1) transitioning to asymmetric Bento/Tetris grid layouts on lg screens. Navigation collapses gracefully into a sleek bottom sheet or frosted blur drawer on mobile.",
+    "typography": "Fluid text hierarchy using rem units. Main H1 strictly capped at text-4xl sm:text-5xl lg:text-6xl (never text-7xl or text-8xl). Body text text-sm sm:text-base. Form inputs text-base (16px) to avoid iOS Safari automatic zoom.",
+    "overflow_guard": "Strict overflow-x-hidden on root element and top containers. All text strings and code addresses (e.g., wallet hashes) wrapped with truncate or break-all to prevent unwanted horizontal page scroll.",
+    "tap_targets": "All interactive elements (quiz options, referral copy buttons, task checkboxes, navigation tabs, filter buttons) must have minimum touch area of 44x44px with comfortable padding."
+  },
+  "typography": {
+    "heading_font": "Rajdhani, 'Chivo Mono', monospace, sans-serif",
+    "body_font": "Outfit, system-ui, -apple-system, sans-serif",
+    "mono_font": "'JetBrains Mono', 'Fira Code', monospace",
+    "scale": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight uppercase",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight uppercase",
+      "h3": "text-xl sm:text-2xl font-semibold tracking-wide",
+      "h4": "text-lg sm:text-xl font-medium",
+      "body": "text-sm sm:text-base leading-relaxed text-slate-300",
+      "label": "text-xs uppercase tracking-[0.2em] font-mono text-cyan-400"
+    }
+  },
+  "colors": {
+    "background": {
+      "void": "#07080c",
+      "card": "#0d1017",
+      "card_hover": "#131824",
+      "glass": "rgba(13, 16, 23, 0.75)"
+    },
+    "border": {
+      "subtle": "#1b2234",
+      "active": "#00f0ff",
+      "success": "#00ff66",
+      "alert": "#ff2a5f"
+    },
+    "brand": {
+      "cyan": "#00f0ff",
+      "cyan_glow": "rgba(0, 240, 255, 0.25)",
+      "emerald": "#00ff66",
+      "hazard_pink": "#ff2a5f",
+      "amber": "#ffb703"
+    },
+    "text": {
+      "primary": "#f0f6fc",
+      "secondary": "#94a3b8",
+      "muted": "#64748b",
+      "brand_accent": "#00f0ff"
+    }
+  },
+  "visual_enhancers": {
+    "grid_lines": "Background subtle cyan grid overlay using repeating linear gradients (opacity 0.04)",
+    "glassmorphism": "backdrop-blur-xl bg-[#0d1017]/80 border border-[#1b2234]",
+    "glow_effects": "shadow-[0_0_25px_rgba(0,240,255,0.15)] for active cards and WL pass indicators",
+    "cyber_decorations": "Terminal angle cut corners, corner crosshairs (+), scanning line animations, HUD-style metric badges",
+    "texture": "Subtle noise grain overlay and dark skeletal anatomical silhouette backgrounds"
+  },
+  "component_structure": {
+    "header": "Sticky navbar with blur background (backdrop-blur-md bg-[#07080c]/80), Osteon Cyber-Bone logo, '206 BONES' status ticker, navigation tabs, and Wallet Identity status badge.",
+    "hero": "Asymmetric hero with glowing cyber-skeleton 3D canvas effect, 206 NFT collection tagline, live whitelist stats, and direct CTA to start Qualification Test.",
+    "lore_concept_bento": "4-card Bento grid detailing Axial vs Appendicular skeletal distribution, 206 Cybernetic NFT trait system, anatomical rarity, and whitelist utility.",
+    "task_section": "Twitter integration tasks card (Follow, Retweet, Like self-declared checkboxes) with verification badge status indicators.",
+    "qualification_test": "Interactive 100-point test module: 10 MCQ quiz questions (5 pts each) + 5 guess-the-bone image MCQs (10 pts each). Includes score meter, question stepper, countdown timer, and pass/fail whitelist screen (70+ score threshold).",
+    "referral_card": "Unique link generator (`osteon.xyz/wl?ref=...`), 1-click copy, Twitter share trigger, live referral counter, and 'Unlock Extra Test Attempt' mechanism.",
+    "leaderboard": "Cyberpunk leaderboard table displaying top referrers, test scores, wallet address truncation, whitelist qualification badge, and search filter.",
+    "admin_panel": "Passcode/ENV protected drawer/modal to inspect all registered users, edit/add quiz questions, adjust test cooldowns, and export participant data."
+  },
+  "instructions_to_main_agent": [
+    "Ensure the entire app is built as a single cohesive responsive Web3 dApp with seamless tab/scroll navigation and dynamic persistent state in React.",
+    "Implement local storage state management for user identity (wallet address + twitter handle), quiz attempts, cooldown timestamps, referrals count, and leaderboard submissions.",
+    "Include pre-loaded rich dataset of 10 multiple choice anatomical Web3 questions (5 pts each) and 5 guess-the-bone visual image questions (10 pts each) with crisp anatomical diagram graphics.",
+    "Ensure all buttons, form inputs, links, and key status badges include explicit data-testid attributes (e.g. data-testid='wallet-connect-btn', data-testid='quiz-option-0', data-testid='referral-copy-btn').",
+    "Follow mobile-first design principles strictly: layout must render cleanly on mobile viewports (360px+) without horizontal scrollbar.",
+    "Do NOT use pure black background or default light blue gradients. Use deep dark void (#07080c) with neon cyber cyan (#00f0ff) and skeletal emerald (#00ff66) highlights.",
+    "Integrate sonner toast notifications for actions like wallet link, task completion, test result submission, and referral copy."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "You tend to converge toward generic, 'on distribution' outputs. In frontend design, this creates what users call the 'AI slop' aesthetic. Avoid this: make creative, distinctive frontends that surprise and delight.",
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur).",
+    "You MUST NOT apply universal transition. Eg: transition: all. This results in breaking transforms. Always add transitions for specific interactive elements like button, input excluding transforms.",
+    "You MUST NOT center align the app container, ie do not add .App { text-align: center; } in the css file. This disrupts the human natural reading flow of text.",
+    "Always use modern button styles like pill-shaped, or sharp button with interaction animations & color relevant to the app style.",
+    "NEVER: use AI assistant Emoji characters like 🤖🧠💭💡🔮🎯 etc for icons. Use Lucide icons instead.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects, and entrance animations. Static = dead.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Subtle grain textures, noise overlays, custom cursors, selection states, and loading animations: separates good from extraordinary.",
+    "All interactive and key informational elements MUST include a data-testid attribute."
+  ]
+}
