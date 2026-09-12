@@ -2,6 +2,7 @@ import { useUser } from "@/context/UserContext";
 import { Button } from "@/components/ui/button";
 import { Menu, Bone, Copy, LogOut } from "lucide-react";
 import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
   DropdownMenu,
@@ -12,49 +13,50 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+const LINKS = [
+  { to: "/archive", label: "Archive" },
+  { to: "/collection", label: "Collection" },
+  { to: "/quests", label: "Quests" },
+  { to: "/leaderboard", label: "Leaderboard" },
+  { to: "/about", label: "About" },
+];
+
 export default function Navbar({ onOpenAuth }) {
   const { user, signOut } = useUser();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const nav = useNavigate();
 
   const truncate = (s) => s ? `${s.slice(0, 6)}…${s.slice(-4)}` : "";
-
-  const links = [
-    { href: "#concept", label: "Concept" },
-    { href: "#tasks", label: "Tasks" },
-    { href: "#test", label: "Test" },
-    { href: "#referral", label: "Referral" },
-    { href: "#leaderboard", label: "Leaderboard" },
-  ];
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#07080c]/80 border-b border-[#1b2234]">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 flex items-center justify-between gap-4">
-        <a href="#" className="flex items-center gap-3 group" data-testid="nav-logo">
+        <NavLink to="/" className="flex items-center gap-3 group" data-testid="nav-logo">
           <div className="relative w-9 h-9 flex items-center justify-center border border-[#00f0ff]/60 clip-terminal bg-[#0d1017]">
             <Bone className="w-5 h-5 text-[#00f0ff]" strokeWidth={1.5} />
           </div>
           <div className="leading-none">
             <div className="font-heading text-xl font-bold tracking-[0.15em] text-white">OSTEON</div>
-            <div className="font-mono-cyber text-[10px] uppercase tracking-[0.3em] text-[#00f0ff]">206.BONES.NFT</div>
+            <div className="font-mono-cyber text-[10px] uppercase tracking-[0.3em] text-[#00f0ff]">206 BONES · DIGITAL ARCHIVE</div>
           </div>
-        </a>
+        </NavLink>
         <nav className="hidden lg:flex items-center gap-1">
-          {links.map(l => (
-            <a
-              key={l.href}
-              href={l.href}
+          {LINKS.map(l => (
+            <NavLink
+              key={l.to}
+              to={l.to}
               data-testid={`nav-${l.label.toLowerCase()}`}
-              className="px-4 py-2 text-sm font-mono-cyber uppercase tracking-widest text-slate-400 hover:text-[#00f0ff]"
+              className={({ isActive }) =>
+                `px-4 py-2 text-sm font-mono-cyber uppercase tracking-widest ${
+                  isActive ? "text-[#00f0ff]" : "text-slate-400 hover:text-[#00f0ff]"
+                }`
+              }
             >
               {l.label}
-            </a>
+            </NavLink>
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 border border-[#1b2234] bg-[#0d1017] clip-notch">
-            <span className="inline-block w-2 h-2 rounded-full bg-[#00ff66] pulse-dot" />
-            <span className="font-mono-cyber text-[10px] uppercase tracking-[0.25em] text-slate-300">LIVE</span>
-          </div>
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -79,7 +81,7 @@ export default function Navbar({ onOpenAuth }) {
                 >
                   <Copy className="w-4 h-4 mr-2" /> Copy address
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={signOut} className="cursor-pointer" data-testid="menu-signout">
+                <DropdownMenuItem onClick={() => { signOut(); nav("/"); }} className="cursor-pointer" data-testid="menu-signout">
                   <LogOut className="w-4 h-4 mr-2" /> Sign out
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -90,7 +92,7 @@ export default function Navbar({ onOpenAuth }) {
               data-testid="nav-link-wallet-btn"
               className="rounded-none clip-notch bg-[#00f0ff] hover:bg-[#00f0ff]/90 text-black font-mono-cyber uppercase tracking-widest text-xs px-5 py-5"
             >
-              Link Wallet
+              Connect
             </Button>
           )}
           <button
@@ -104,15 +106,19 @@ export default function Navbar({ onOpenAuth }) {
       </div>
       {mobileOpen && (
         <div className="lg:hidden border-t border-[#1b2234] bg-[#0d1017]">
-          {links.map(l => (
-            <a
-              key={l.href}
-              href={l.href}
+          {LINKS.map(l => (
+            <NavLink
+              key={l.to}
+              to={l.to}
               onClick={() => setMobileOpen(false)}
-              className="block px-6 py-4 text-sm font-mono-cyber uppercase tracking-widest text-slate-300 border-b border-[#1b2234]"
+              className={({ isActive }) =>
+                `block px-6 py-4 text-sm font-mono-cyber uppercase tracking-widest border-b border-[#1b2234] ${
+                  isActive ? "text-[#00f0ff]" : "text-slate-300"
+                }`
+              }
             >
               {l.label}
-            </a>
+            </NavLink>
           ))}
         </div>
       )}

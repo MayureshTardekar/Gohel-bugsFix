@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 from typing import List, Optional, Dict
 import uuid
 from datetime import datetime, timezone, timedelta
+from bones_data import get_archive, get_regions
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -24,6 +25,7 @@ ADMIN_TOKEN = os.environ.get('ADMIN_TOKEN', 'osteon-admin-secret-token-206')
 
 COOLDOWN_HOURS = 24
 PASS_SCORE = 70
+REFERRAL_QUALIFY_SCORE = 30
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -150,15 +152,6 @@ async def register(inp: RegisterInput):
     }
     await db.users.insert_one(user)
 
-    # Increment referrer count if referred_by valid
-    if inp.referred_by:
-        ref = await db.users.find_one({"referral_code": inp.referred_by})
-        if ref and ref["wallet_address"] != wallet:
-            await db.users.update_one(
-                {"referral_code": inp.referred_by},
-                {"$inc": {"referral_count": 1}}
-            )
-
     user.pop("_id", None)
     return {"user": user, "message": "Registered"}
 
@@ -176,8 +169,17 @@ async def get_user(wallet_address: str):
     user = await db.users.find_one({"wallet_address": wallet}, {"_id": 0})
     if not user:
         raise HTTPException(404, "User not found")
-    # Compute allowed attempts
-    allowed = 1 + user.get("referral_count", 0)
+    # Compute valid/pending referral counts from referred users
+    referred_users = await db.users.find(
+        {"referred_by": user.get("referral_code")},
+        {"_id": 0, "wallet_address": 1, "twitter_username": 1, "best_score": 1}
+    ).to_list(500)
+    valid_referrals = [r for r in referred_users if r.get("best_score", 0) >= REFERRAL_QUALIFY_SCORE]
+    pending_referrals = [r for r in referred_users if r.get("best_score", 0) < REFERRAL_QUALIFY_SCORE]
+    user["valid_referral_count"] = len(valid_referrals)
+    user["pending_referral_count"] = len(pending_referrals)
+    user["total_referrals"] = len(referred_users)
+    allowed = 1 + user["valid_referral_count"]
     user["allowed_attempts"] = allowed
     user["attempts_remaining"] = max(0, allowed - user.get("attempts_used", 0))
     # Cooldown
@@ -190,6 +192,33 @@ async def get_user(wallet_address: str):
             cooldown_remaining = int(remaining.total_seconds())
     user["cooldown_seconds"] = cooldown_remaining
     return {"user": user}
+
+@api_router.get("/referrals/{wallet_address}")
+async def get_referrals(wallet_address: str):
+    wallet = normalize_wallet(wallet_address)
+    user = await db.users.find_one({"wallet_address": wallet}, {"_id": 0})
+    if not user:
+        raise HTTPException(404, "User not found")
+    referred = await db.users.find(
+        {"referred_by": user.get("referral_code")},
+        {"_id": 0, "wallet_address": 1, "twitter_username": 1, "best_score": 1, "created_at": 1}
+    ).to_list(500)
+    items = []
+    for r in referred:
+        status = "qualified" if r.get("best_score", 0) >= REFERRAL_QUALIFY_SCORE else "pending"
+        items.append({
+            "wallet_address": r["wallet_address"],
+            "twitter_username": r.get("twitter_username", ""),
+            "score": r.get("best_score", 0),
+            "required": REFERRAL_QUALIFY_SCORE,
+            "status": status,
+            "created_at": r.get("created_at"),
+        })
+    return {"referrals": items, "qualify_score": REFERRAL_QUALIFY_SCORE}
+
+@api_router.get("/archive")
+async def get_archive_endpoint():
+    return {"bones": get_archive(), "regions": get_regions(), "total": 206}
 
 @api_router.post("/tasks/complete")
 async def complete_tasks(inp: TaskInput):
@@ -221,10 +250,15 @@ async def submit_test(inp: TestSubmitInput):
     if not user:
         raise HTTPException(404, "User not found")
 
-    # Check attempts
-    allowed = 1 + user.get("referral_count", 0)
+    # Check attempts (valid referral based)
+    referred_users = await db.users.find(
+        {"referred_by": user.get("referral_code")},
+        {"_id": 0, "best_score": 1}
+    ).to_list(500)
+    valid_ref_count = sum(1 for r in referred_users if r.get("best_score", 0) >= REFERRAL_QUALIFY_SCORE)
+    allowed = 1 + valid_ref_count
     if user.get("attempts_used", 0) >= allowed:
-        raise HTTPException(403, "No attempts remaining. Refer more friends to unlock attempts.")
+        raise HTTPException(403, "No attempts remaining. Refer friends who score 30+ to unlock attempts.")
 
     # Check cooldown
     if user.get("last_attempt_at"):
@@ -281,11 +315,29 @@ async def submit_test(inp: TestSubmitInput):
 
 @api_router.get("/leaderboard")
 async def leaderboard():
-    users = await db.users.find(
-        {},
-        {"_id": 0, "wallet_address": 1, "twitter_username": 1, "referral_count": 1, "best_score": 1, "qualified_wl": 1}
-    ).sort([("referral_count", -1), ("best_score", -1)]).limit(100).to_list(100)
-    return {"leaderboard": users}
+    # Get all users and compute valid referral count for each
+    all_users = await db.users.find({}, {"_id": 0}).to_list(2000)
+    by_code = {}
+    for u in all_users:
+        code = u.get("referred_by")
+        if code:
+            by_code.setdefault(code, []).append(u.get("best_score", 0))
+    result = []
+    for u in all_users:
+        scores = by_code.get(u.get("referral_code"), [])
+        valid = sum(1 for s in scores if s >= REFERRAL_QUALIFY_SCORE)
+        pending = sum(1 for s in scores if s < REFERRAL_QUALIFY_SCORE)
+        result.append({
+            "wallet_address": u["wallet_address"],
+            "twitter_username": u.get("twitter_username", ""),
+            "valid_referrals": valid,
+            "pending_referrals": pending,
+            "best_score": u.get("best_score", 0),
+            "attempts_used": u.get("attempts_used", 0),
+            "qualified_wl": u.get("qualified_wl", False),
+        })
+    result.sort(key=lambda x: (-x["valid_referrals"], -x["best_score"]))
+    return {"leaderboard": result[:100]}
 
 # ==================== Admin Endpoints ====================
 

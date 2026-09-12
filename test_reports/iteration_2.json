@@ -1,0 +1,28 @@
+{
+  "summary": "Iteration 2 (multi-page + valid referral logic) fully tested. Backend: 8/8 pytest passed - /api/archive returns 206 bones + 9 regions; /api/user returns valid_referral_count/pending/total/allowed_attempts fields; referral scenario A->B verified (pending when B score=0, promoted to qualified when B scores >=30, A.allowed_attempts becomes 2); /api/referrals/{wallet} returns status pending/qualified with required=30; /api/test/submit blocks 2nd attempt with 403/429; /api/leaderboard sorted by valid_referrals desc then best_score desc. Frontend: Home hero + all 10 data-testids resolve, nav routes Archive/Collection/Quests/Leaderboard/About all work, Archive renders 206 bone cards + region filter + search + specimen dialog, Collection shows 206/2060 stats, Quests lock screen with connect button, Quests dashboard after AuthModal 'LINK & ENTER' shows wallet/best_score/valid_referrals/attempts cards, Recruit card with Valid/Pending/Attempts + copy link + share, referrals empty state, Social Tasks section, Qualification Test section, /leaderboard renders table, /about long-form, /admin login with osteon_admin/BoneMaster206 unlocks Users(8)/Questions(15) tabs.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "AuthModal / dialog", "issues": ["Radix DialogContent warning: DialogContent requires a DialogTitle for screen reader accessibility. Wrap the invisible title with VisuallyHidden. Non-blocking a11y console warning."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/iteration_2.xml"],
+  "action_items": [
+    "Optional (a11y): Add VisuallyHidden DialogTitle inside dialog components (specimen dialog and AuthModal) to silence Radix accessibility warning."
+  ],
+  "critical_code_review_comments": [
+    "server.py submit_test: cooldown check fires before attempts_used check; when a user with attempts_used=0 exhausts single attempt, retry hits 429 first. Order is fine but error message 'No attempts remaining' rarely surfaces until 24h passes. Consider swapping order so users get accurate messaging.",
+    "server.py get_user/leaderboard iterate all users to compute referral counts on every call -- O(N^2) with growth. Add an aggregation pipeline or maintain a valid_referral_count cache when attempts finalize.",
+    "Frontend leaderboard rows tested with only 8 users (small dataset); ensure pagination when >100 rows (backend already limits to 100)."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py"],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Admin osteon_admin/BoneMaster206; wallets generated per-run as 0x + 40 hex.",
+  "seed_data_creation": "Created ~5 TEST_ prefixed users during test run; harmless (used for referral scenario).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iteration 2 restructure verified. If retesting, note that /api/test/submit checks cooldown BEFORE attempts, so second submit within 24h returns 429 (not 403). Use fresh wallets per test run to avoid cooldown collisions.",
+  "rca of the issue": "No blocking issues."
+}

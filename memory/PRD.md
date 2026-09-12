@@ -25,6 +25,15 @@ Responsive dark futuristic Web3 site for Osteon (NFT project inspired by 206 hum
 - Live leaderboard sorted by refs then score
 - Admin panel at /admin (login, user table, question CRUD, CSV export)
 
+### Restructure (Feb 2026 v2)
+- Split into multi-page site: Home / Archive / Collection / Quests / Leaderboard / About / Admin
+- Full 206-bone Archive with 9 anatomical regions, search, filters, specimen dialog
+- Collection page with 2060 supply / 10 editions
+- Quest Center dashboard with wallet/score/refs/attempts + referral list (pending vs qualified)
+- Referral qualification logic: referral valid only when referred user scores ≥30
+- Leaderboard ranked by valid referrals (tie: best_score)
+- New endpoints: GET /api/archive, GET /api/referrals/{wallet}
+
 ## Test Credentials
 See /app/memory/test_credentials.md
 

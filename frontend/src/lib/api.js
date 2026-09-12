@@ -12,6 +12,8 @@ export const completeTasks = (wallet, tasks) => api.post("/tasks/complete", { wa
 export const getQuestions = () => api.get("/questions").then(r => r.data);
 export const submitTest = (wallet, answers) => api.post("/test/submit", { wallet_address: wallet, answers }).then(r => r.data);
 export const getLeaderboard = () => api.get("/leaderboard").then(r => r.data);
+export const getReferrals = (wallet) => api.get(`/referrals/${wallet}`).then(r => r.data);
+export const getArchive = () => api.get("/archive").then(r => r.data);
 
 export const adminLogin = (username, password) => api.post("/admin/login", { username, password }).then(r => r.data);
 export const adminGetUsers = (token) => api.get("/admin/users", { headers: { "X-Admin-Token": token } }).then(r => r.data);

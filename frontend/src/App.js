@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
-import "@/App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
-import Landing from "@/pages/Landing";
-import Admin from "@/pages/Admin";
+import "@/App.css";
 import { UserProvider } from "@/context/UserContext";
+import PublicLayout from "@/layouts/PublicLayout";
+import Home from "@/pages/Home";
+import Archive from "@/pages/Archive";
+import Collection from "@/pages/Collection";
+import Quests from "@/pages/Quests";
+import LeaderboardPage from "@/pages/LeaderboardPage";
+import About from "@/pages/About";
+import Admin from "@/pages/Admin";
 
 function App() {
   return (
@@ -23,7 +29,14 @@ function App() {
           }}
         />
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/archive" element={<Archive />} />
+            <Route path="/collection" element={<Collection />} />
+            <Route path="/quests" element={<Quests />} />
+            <Route path="/leaderboard" element={<LeaderboardPage />} />
+            <Route path="/about" element={<About />} />
+          </Route>
           <Route path="/admin" element={<Admin />} />
         </Routes>
       </BrowserRouter>
