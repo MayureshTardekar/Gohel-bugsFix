@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -54,6 +54,8 @@ body {
 }
 
 .font-heading { font-family: 'Rajdhani', monospace; letter-spacing: 0.02em; }
+.font-editorial { font-family: 'Fraunces', 'Cormorant Garamond', 'Times New Roman', serif; font-optical-sizing: auto; }
+.font-editorial-italic { font-family: 'Fraunces', serif; font-style: italic; font-optical-sizing: auto; }
 .font-mono-cyber { font-family: 'JetBrains Mono', monospace; }
 
 /* Grid background */
@@ -158,6 +160,38 @@ button, a { transition: background-color 220ms ease, color 220ms ease, border-co
     background: linear-gradient(90deg, #00f0ff, #00ff66);
     transition: width 400ms ease;
 }
+
+/* Card hover lift */
+.card-lift:hover { transform: translateY(-2px); }
+.card-lift { transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease; }
+
+/* Mist/cloud transitions between sections */
+.mist-fade-top {
+    background: linear-gradient(to bottom, rgba(7, 8, 12, 1) 0%, rgba(7, 8, 12, 0.4) 40%, transparent 100%);
+}
+.mist-fade-bottom {
+    background: linear-gradient(to top, rgba(7, 8, 12, 1) 0%, rgba(7, 8, 12, 0.4) 40%, transparent 100%);
+}
+.mist-overlay {
+    background: radial-gradient(ellipse at center bottom, rgba(0, 240, 255, 0.08), transparent 60%),
+                radial-gradient(ellipse at center top, rgba(0, 255, 102, 0.05), transparent 55%);
+}
+
+/* Coordinate label */
+.coord-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(240, 246, 252, 0.5);
+}
+
+/* Editorial vertical divider */
+.editorial-rule {
+    background: linear-gradient(to bottom, transparent, rgba(0, 240, 255, 0.4), transparent);
+    width: 1px;
+}
+
 
 /* Card hover lift */
 .card-lift:hover { transform: translateY(-2px); }
