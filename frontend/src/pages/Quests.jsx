@@ -291,21 +291,51 @@ function ConnectGate({ onConnect }) {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, delay: 0.3 }}
+            transition={{ duration: 1.4, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="relative max-w-sm mx-auto"
           >
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-2 rounded-full border border-dashed border-[#00f0ff]/20"
+              className="absolute -inset-6 rounded-full border border-dashed border-[#00f0ff]/15"
             />
-            <AnimatedSkeleton className="w-full h-[500px] mx-auto" />
-            <motion.div
-              animate={{ opacity: [0.2, 0.6, 0.2] }}
-              transition={{ duration: 3, repeat: Infinity }}
-              className="absolute inset-0 pointer-events-none rounded-full"
-              style={{ background: "radial-gradient(circle, rgba(0,240,255,0.15), transparent 60%)" }}
-            />
+            <div className="relative aspect-[2/3] overflow-hidden clip-terminal">
+              <motion.div
+                animate={{ opacity: [0.3, 0.7, 0.3] }}
+                transition={{ duration: 5, repeat: Infinity }}
+                className="absolute -inset-4 pointer-events-none"
+                style={{
+                  background:
+                    "radial-gradient(ellipse at 30% 20%, rgba(0,240,255,0.35), transparent 55%), radial-gradient(ellipse at 70% 80%, rgba(0,255,102,0.15), transparent 60%)",
+                  filter: "blur(30px)",
+                }}
+              />
+              <motion.img
+                src="https://customer-assets-gfyr7b9c.emergentagent.net/job_osteon-qualify/artifacts/90ye6eof_file_0000000035688211bcef3a342f5bbfa2.png"
+                alt="OSTEON specimen"
+                className="relative w-full h-full object-cover z-10"
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div
+                initial={{ y: "-10%" }}
+                animate={{ y: "110%" }}
+                transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+                className="absolute left-0 right-0 h-20 pointer-events-none z-20"
+                style={{
+                  background: "linear-gradient(to bottom, transparent, rgba(0,240,255,0.3) 50%, transparent)",
+                  mixBlendMode: "screen",
+                }}
+              />
+              <div className="absolute top-3 left-3 w-6 h-6 border-l border-t border-[#00f0ff]/60 z-20" />
+              <div className="absolute top-3 right-3 w-6 h-6 border-r border-t border-[#00f0ff]/60 z-20" />
+              <div className="absolute bottom-3 left-3 w-6 h-6 border-l border-b border-[#00f0ff]/60 z-20" />
+              <div className="absolute bottom-3 right-3 w-6 h-6 border-r border-b border-[#00f0ff]/60 z-20" />
+            </div>
+            <div className="mt-4 flex justify-between items-center">
+              <div className="coord-label text-[#00f0ff]">Specimen · Full Articulation</div>
+              <div className="coord-label">206 / 206</div>
+            </div>
           </motion.div>
         </div>
       </div>

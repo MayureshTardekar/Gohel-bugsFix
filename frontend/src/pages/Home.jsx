@@ -148,43 +148,98 @@ export default function Home() {
           {/* Skeleton visual */}
           <div className="lg:col-span-5 relative">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1.5, delay: 0.5 }}
-              className="relative mx-auto max-w-md"
+              initial={{ opacity: 0, scale: 0.96, y: 40 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 1.6, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="relative mx-auto max-w-md lg:max-w-lg"
             >
+              {/* Ambient rings */}
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0 rounded-full border border-dashed border-white/10"
+                className="absolute -inset-6 rounded-full border border-dashed border-white/10"
               />
-              <AnimatedSkeleton className="w-full h-[620px] mx-auto relative z-10" />
+              <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+                className="absolute -inset-2 rounded-full border border-white/5"
+              />
+
+              {/* Skeleton photograph — museum lit */}
+              <div className="relative aspect-[2/3] overflow-hidden clip-terminal">
+                {/* Rim glow */}
+                <motion.div
+                  animate={{ opacity: [0.35, 0.7, 0.35] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute -inset-4 pointer-events-none"
+                  style={{
+                    background:
+                      "radial-gradient(ellipse at 30% 20%, rgba(0,240,255,0.35), transparent 55%), radial-gradient(ellipse at 70% 80%, rgba(0,255,102,0.15), transparent 60%)",
+                    filter: "blur(30px)",
+                  }}
+                />
+                <motion.img
+                  src="https://customer-assets-gfyr7b9c.emergentagent.net/job_osteon-qualify/artifacts/90ye6eof_file_0000000035688211bcef3a342f5bbfa2.png"
+                  alt="OSTEON specimen — full articulated human skeleton"
+                  className="relative z-10 w-full h-full object-cover object-center"
+                  style={{ filter: "drop-shadow(0 25px 60px rgba(0,240,255,0.15))" }}
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                />
+
+                {/* Scanning line */}
+                <motion.div
+                  initial={{ y: "-10%" }}
+                  animate={{ y: "110%" }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "linear", delay: 2 }}
+                  className="absolute left-0 right-0 h-24 pointer-events-none z-20"
+                  style={{
+                    background:
+                      "linear-gradient(to bottom, transparent, rgba(0,240,255,0.15) 40%, rgba(0,240,255,0.35) 50%, rgba(0,240,255,0.15) 60%, transparent)",
+                    mixBlendMode: "screen",
+                  }}
+                />
+
+                {/* Corner brackets */}
+                <div className="absolute top-3 left-3 w-6 h-6 border-l border-t border-[#00f0ff]/60 z-20" />
+                <div className="absolute top-3 right-3 w-6 h-6 border-r border-t border-[#00f0ff]/60 z-20" />
+                <div className="absolute bottom-3 left-3 w-6 h-6 border-l border-b border-[#00f0ff]/60 z-20" />
+                <div className="absolute bottom-3 right-3 w-6 h-6 border-r border-b border-[#00f0ff]/60 z-20" />
+              </div>
+
+              {/* Floating specimen labels */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.8, duration: 1 }}
-                className="absolute top-[8%] -left-4 sm:-left-12 flex items-center gap-2 z-20"
+                className="absolute top-[6%] -left-4 sm:-left-10 flex items-center gap-2 z-30"
               >
-                <div className="w-12 h-px bg-[#00f0ff]" />
-                <div className="coord-label text-[#00f0ff]">OSTEON-001 · CRANIUM</div>
+                <div className="w-10 sm:w-14 h-px bg-[#00f0ff]" />
+                <div className="px-3 py-1.5 bg-[#0d1017]/90 border border-[#00f0ff]/50 clip-notch backdrop-blur">
+                  <div className="coord-label text-[#00f0ff]">OSTEON-001 · CRANIUM</div>
+                </div>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 2.1, duration: 1 }}
-                className="absolute top-[36%] -right-4 sm:-right-12 flex items-center gap-2 z-20"
+                className="absolute top-[36%] -right-4 sm:-right-10 flex items-center gap-2 z-30"
               >
-                <div className="coord-label text-[#00ff66]">24 · RIBS · BILATERAL</div>
-                <div className="w-12 h-px bg-[#00ff66]" />
+                <div className="px-3 py-1.5 bg-[#0d1017]/90 border border-[#00ff66]/50 clip-notch backdrop-blur">
+                  <div className="coord-label text-[#00ff66]">24 · RIBS · BILATERAL</div>
+                </div>
+                <div className="w-10 sm:w-14 h-px bg-[#00ff66]" />
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 2.4, duration: 1 }}
-                className="absolute bottom-[8%] left-4 flex items-center gap-2 z-20"
+                className="absolute bottom-[12%] left-4 flex items-center gap-2 z-30"
               >
-                <div className="w-12 h-px bg-[#ffb703]" />
-                <div className="coord-label text-[#ffb703]">FEMUR · L4 · 45CM AVG</div>
+                <div className="w-10 sm:w-14 h-px bg-[#ffb703]" />
+                <div className="px-3 py-1.5 bg-[#0d1017]/90 border border-[#ffb703]/50 clip-notch backdrop-blur">
+                  <div className="coord-label text-[#ffb703]">FEMUR · L4 · 45CM AVG</div>
+                </div>
               </motion.div>
             </motion.div>
           </div>

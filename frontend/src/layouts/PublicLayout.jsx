@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AuthModal from "@/components/AuthModal";
+import AmbientAudio from "@/components/AmbientAudio";
 
 export default function PublicLayout() {
   const [authOpen, setAuthOpen] = useState(false);
@@ -15,6 +16,7 @@ export default function PublicLayout() {
       </main>
       <Footer />
       <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} initialRef={new URLSearchParams(window.location.search).get("ref")} />
+      <AmbientAudio />
     </div>
   );
 }
