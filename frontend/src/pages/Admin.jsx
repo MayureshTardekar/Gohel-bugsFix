@@ -59,7 +59,7 @@ export default function Admin() {
   const exportCsv = () => {
     const header = "wallet,twitter,score,referrals,qualified,attempts_used\n";
     const rows = users
-      .map((u) => `${u.wallet_address},${u.twitter_username},${u.best_score},${u.referral_count},${u.qualified_wl},${u.attempts_used}`)
+      .map((u) => `${u.wallet_address},${u.twitter_username},${u.best_score},${u.valid_referrals},${u.qualified_wl},${u.attempts_used}`)
       .join("\n");
     const blob = new Blob([header + rows], { type: "text/csv" });
     const a = document.createElement("a");
@@ -183,7 +183,7 @@ export default function Admin() {
                       <td className="p-4 font-mono-cyber text-xs">{u.wallet_address}</td>
                       <td className="p-4 font-mono-cyber text-xs text-slate-400">@{u.twitter_username}</td>
                       <td className="p-4 text-[#00ff66] font-bold">{u.best_score}</td>
-                      <td className="p-4 text-[#00f0ff] font-bold">{u.referral_count}</td>
+                      <td className="p-4 text-[#00f0ff] font-bold">{u.valid_referrals ?? 0}</td>
                       <td className="p-4">{u.qualified_wl ? <span className="text-[#00ff66]">✓</span> : <span className="text-slate-500">—</span>}</td>
                       <td className="p-4 text-slate-300">{u.attempts_used}</td>
                     </tr>

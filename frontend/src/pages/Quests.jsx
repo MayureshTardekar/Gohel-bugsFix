@@ -6,10 +6,60 @@ import { getUser, getReferrals } from "@/lib/api";
 import Tasks from "@/components/Tasks";
 import QualificationTest from "@/components/QualificationTest";
 import Referral from "@/components/Referral";
-import AnimatedSkeleton from "@/components/AnimatedSkeleton";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/Motion";
 import { Button } from "@/components/ui/button";
 import { Trophy, Target, Users, Zap, Lock, Wallet, ArrowRight, Shield } from "lucide-react";
+import { useMemo } from "react";
+
+const POSES = [
+  { src: "/skeletons/skeleton_standing.png", label: "SPEC-001 · NEUTRAL" },
+  { src: "/skeletons/skeleton_contrapposto.png", label: "SPEC-042 · CONTRAPPOSTO" },
+  { src: "/skeletons/skeleton_thinker.png", label: "SPEC-108 · CONTEMPLATIO" },
+  { src: "/skeletons/skeleton_reaching.png", label: "SPEC-176 · ASCENSIO" },
+];
+
+function ConnectSkeleton() {
+  const pose = useMemo(() => POSES[Math.floor(Math.random() * POSES.length)], []);
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 1.4, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+      className="relative max-w-sm mx-auto"
+    >
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+        className="absolute -inset-6 rounded-full border border-dashed border-[#00f0ff]/15"
+      />
+      <div className="relative aspect-[2/3] overflow-visible">
+        <motion.img
+          key={pose.src}
+          src={pose.src}
+          alt="OSTEON specimen"
+          className="relative w-full h-full object-contain z-10"
+          style={{ filter: "drop-shadow(0 20px 50px rgba(0,240,255,0.3))" }}
+          animate={{ y: [0, -8, 0] }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          initial={{ y: "-10%" }}
+          animate={{ y: "110%" }}
+          transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+          className="absolute left-0 right-0 h-20 pointer-events-none z-20"
+          style={{
+            background: "linear-gradient(to bottom, transparent, rgba(0,240,255,0.3) 50%, transparent)",
+            mixBlendMode: "screen",
+          }}
+        />
+      </div>
+      <div className="mt-6 flex justify-between items-center">
+        <div className="coord-label text-[#00f0ff]">{pose.label}</div>
+        <div className="coord-label">206 / 206</div>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function Quests() {
   const { user } = useUser();
@@ -50,7 +100,7 @@ export default function Quests() {
             </div>
             <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight leading-[1.05]">
               Welcome, <br />
-              <span className="text-[#00ff66]">operator {truncate(user.wallet_address)}</span>.
+              <span className="text-[#00ff66]">@{user.twitter_username}</span>.
             </h1>
             <p className="mt-6 text-slate-400 text-base sm:text-lg max-w-2xl leading-relaxed">
               Complete tasks. Test your anatomy. Recruit qualified allies. Climb the network leaderboard.
@@ -87,7 +137,7 @@ export default function Quests() {
                 <Zap className="w-5 h-5 text-[#ffb703]" />
                 <div className="mt-3 font-heading text-4xl font-black text-[#ffb703]">
                   {info?.attempts_remaining ?? 0}
-                  <span className="text-slate-500 text-lg">/{info?.allowed_attempts ?? 1}</span>
+                  <span className="text-slate-500 text-lg">/{info?.allowed_attempts ?? 3}</span>
                 </div>
                 <div className="font-mono-cyber text-[10px] uppercase tracking-[0.3em] text-slate-400 mt-1">Attempts Left</div>
               </div>
@@ -288,55 +338,7 @@ function ConnectGate({ onConnect }) {
         </div>
 
         <div className="lg:col-span-5 relative">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.4, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="relative max-w-sm mx-auto"
-          >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-              className="absolute -inset-6 rounded-full border border-dashed border-[#00f0ff]/15"
-            />
-            <div className="relative aspect-[2/3] overflow-hidden clip-terminal">
-              <motion.div
-                animate={{ opacity: [0.3, 0.7, 0.3] }}
-                transition={{ duration: 5, repeat: Infinity }}
-                className="absolute -inset-4 pointer-events-none"
-                style={{
-                  background:
-                    "radial-gradient(ellipse at 30% 20%, rgba(0,240,255,0.35), transparent 55%), radial-gradient(ellipse at 70% 80%, rgba(0,255,102,0.15), transparent 60%)",
-                  filter: "blur(30px)",
-                }}
-              />
-              <motion.img
-                src="https://customer-assets-gfyr7b9c.emergentagent.net/job_osteon-qualify/artifacts/90ye6eof_file_0000000035688211bcef3a342f5bbfa2.png"
-                alt="OSTEON specimen"
-                className="relative w-full h-full object-cover z-10"
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <motion.div
-                initial={{ y: "-10%" }}
-                animate={{ y: "110%" }}
-                transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-                className="absolute left-0 right-0 h-20 pointer-events-none z-20"
-                style={{
-                  background: "linear-gradient(to bottom, transparent, rgba(0,240,255,0.3) 50%, transparent)",
-                  mixBlendMode: "screen",
-                }}
-              />
-              <div className="absolute top-3 left-3 w-6 h-6 border-l border-t border-[#00f0ff]/60 z-20" />
-              <div className="absolute top-3 right-3 w-6 h-6 border-r border-t border-[#00f0ff]/60 z-20" />
-              <div className="absolute bottom-3 left-3 w-6 h-6 border-l border-b border-[#00f0ff]/60 z-20" />
-              <div className="absolute bottom-3 right-3 w-6 h-6 border-r border-b border-[#00f0ff]/60 z-20" />
-            </div>
-            <div className="mt-4 flex justify-between items-center">
-              <div className="coord-label text-[#00f0ff]">Specimen · Full Articulation</div>
-              <div className="coord-label">206 / 206</div>
-            </div>
-          </motion.div>
+          <ConnectSkeleton />
         </div>
       </div>
     </section>

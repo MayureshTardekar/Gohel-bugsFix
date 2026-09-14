@@ -1,9 +1,15 @@
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { ArrowRight, ChevronDown, Bone } from "lucide-react";
 import { Reveal, StaggerGroup, StaggerItem, SlideIn } from "@/components/Motion";
-import AnimatedSkeleton from "@/components/AnimatedSkeleton";
+
+const POSES = [
+  { src: "/skeletons/skeleton_standing.png", label: "SPECIMEN 001 · ANATOMICAL NEUTRAL" },
+  { src: "/skeletons/skeleton_contrapposto.png", label: "SPECIMEN 042 · CONTRAPPOSTO" },
+  { src: "/skeletons/skeleton_thinker.png", label: "SPECIMEN 108 · CONTEMPLATIO" },
+  { src: "/skeletons/skeleton_reaching.png", label: "SPECIMEN 176 · ASCENSIO" },
+];
 
 const REGIONS = [
   { name: "Skull", count: 22, parent: "Axial", coord: "22 · CRANIAL VAULT" },
@@ -18,7 +24,7 @@ const STEPS = [
   { n: "01", title: "Consultation", desc: "Bind your X handle to the archive. Every specimen is tied to a public identity — no anonymous specimens." },
   { n: "02", title: "Confirmation", desc: "Provide your wallet. Your on-chain signature is sealed. This is your key to the collection." },
   { n: "03", title: "Trial", desc: "10 anatomical questions. 5 bone identification. 100 points. Score 70+ to qualify for the whitelist." },
-  { n: "04", title: "Recruitment", desc: "Every friend who scores 30+ becomes a valid referral — and unlocks +1 attempt for you." },
+  { n: "04", title: "Recruitment", desc: "Every friend who scores 30+ becomes a valid referral — and unlocks one extra attempt for you." },
   { n: "05", title: "Ascension", desc: "Climb the network leaderboard. Prove your fluency. Enter the archive." },
 ];
 
@@ -38,6 +44,7 @@ export default function Home() {
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroY = useTransform(heroScroll, [0, 1], [0, 120]);
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
+  const pose = useMemo(() => POSES[Math.floor(Math.random() * POSES.length)], []);
 
   return (
     <div>
@@ -134,7 +141,7 @@ export default function Home() {
               {[
                 { v: "206", l: "Bones" },
                 { v: "2,060", l: "Editions" },
-                { v: "9", l: "Regions" },
+                { v: "10", l: "Regions" },
               ].map((s, i) => (
                 <div key={s.l} className="flex items-baseline gap-3">
                   <div className="font-editorial text-3xl sm:text-4xl font-light text-white">{s.v}</div>
@@ -166,24 +173,16 @@ export default function Home() {
               />
 
               {/* Skeleton photograph — museum lit */}
-              <div className="relative aspect-[2/3] overflow-hidden clip-terminal">
-                {/* Rim glow */}
-                <motion.div
-                  animate={{ opacity: [0.35, 0.7, 0.35] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute -inset-4 pointer-events-none"
-                  style={{
-                    background:
-                      "radial-gradient(ellipse at 30% 20%, rgba(0,240,255,0.35), transparent 55%), radial-gradient(ellipse at 70% 80%, rgba(0,255,102,0.15), transparent 60%)",
-                    filter: "blur(30px)",
-                  }}
-                />
+              <div className="relative aspect-[2/3] overflow-visible">
                 <motion.img
-                  src="https://customer-assets-gfyr7b9c.emergentagent.net/job_osteon-qualify/artifacts/90ye6eof_file_0000000035688211bcef3a342f5bbfa2.png"
-                  alt="OSTEON specimen — full articulated human skeleton"
-                  className="relative z-10 w-full h-full object-cover object-center"
-                  style={{ filter: "drop-shadow(0 25px 60px rgba(0,240,255,0.15))" }}
-                  animate={{ y: [0, -8, 0] }}
+                  key={pose.src}
+                  src={pose.src}
+                  alt="OSTEON specimen — articulated human skeleton"
+                  className="relative z-10 w-full h-full object-contain object-center"
+                  style={{
+                    filter: "drop-shadow(0 20px 50px rgba(0,240,255,0.35)) drop-shadow(0 0 30px rgba(0,255,102,0.15))",
+                  }}
+                  animate={{ y: [0, -12, 0] }}
                   transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
                 />
 
@@ -195,17 +194,22 @@ export default function Home() {
                   className="absolute left-0 right-0 h-24 pointer-events-none z-20"
                   style={{
                     background:
-                      "linear-gradient(to bottom, transparent, rgba(0,240,255,0.15) 40%, rgba(0,240,255,0.35) 50%, rgba(0,240,255,0.15) 60%, transparent)",
+                      "linear-gradient(to bottom, transparent, rgba(0,240,255,0.15) 40%, rgba(0,240,255,0.45) 50%, rgba(0,240,255,0.15) 60%, transparent)",
                     mixBlendMode: "screen",
                   }}
                 />
-
-                {/* Corner brackets */}
-                <div className="absolute top-3 left-3 w-6 h-6 border-l border-t border-[#00f0ff]/60 z-20" />
-                <div className="absolute top-3 right-3 w-6 h-6 border-r border-t border-[#00f0ff]/60 z-20" />
-                <div className="absolute bottom-3 left-3 w-6 h-6 border-l border-b border-[#00f0ff]/60 z-20" />
-                <div className="absolute bottom-3 right-3 w-6 h-6 border-r border-b border-[#00f0ff]/60 z-20" />
               </div>
+
+              {/* Specimen tag */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 2.6, duration: 1 }}
+                className="mt-6 flex items-center justify-between"
+              >
+                <div className="coord-label text-[#00f0ff]">{pose.label}</div>
+                <div className="coord-label">206 / 206</div>
+              </motion.div>
 
               {/* Floating specimen labels */}
               <motion.div
@@ -301,7 +305,7 @@ export default function Home() {
             </SlideIn>
             <SlideIn from="right" delay={0.15} className="lg:col-span-6 lg:col-start-7">
               <p className="text-slate-400 text-base sm:text-lg leading-[1.9] font-editorial italic font-light">
-                Each bone is documented, illustrated, and classified — organized across nine anatomical regions of the
+                Each bone is documented, illustrated, and classified — organized across ten anatomical regions of the
                 axial and appendicular skeleton. This is not decoration; it is the exact blueprint of the human body.
               </p>
               <Link

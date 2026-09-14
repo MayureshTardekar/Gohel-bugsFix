@@ -57,7 +57,7 @@ export default function Referral({ onOpenAuth }) {
               </div>
               <div className="cyber-corners p-4 bg-[#0d1017]/70 border border-[#1b2234] clip-terminal">
                 <Sparkles className="w-5 h-5 text-[#ffb703]" strokeWidth={1.4} />
-                <div className="mt-2 font-heading text-3xl font-bold text-[#ffb703]">{info?.allowed_attempts ?? 1}</div>
+                <div className="mt-2 font-heading text-3xl font-bold text-[#ffb703]">{info?.allowed_attempts ?? 3}</div>
                 <div className="font-mono-cyber text-[9px] uppercase tracking-widest text-slate-400 mt-1">Attempts</div>
               </div>
             </div>

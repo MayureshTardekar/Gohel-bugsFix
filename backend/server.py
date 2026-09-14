@@ -26,6 +26,7 @@ ADMIN_TOKEN = os.environ.get('ADMIN_TOKEN', 'osteon-admin-secret-token-206')
 COOLDOWN_HOURS = 24
 PASS_SCORE = 70
 REFERRAL_QUALIFY_SCORE = 30
+INITIAL_ATTEMPTS = 3
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -179,12 +180,12 @@ async def get_user(wallet_address: str):
     user["valid_referral_count"] = len(valid_referrals)
     user["pending_referral_count"] = len(pending_referrals)
     user["total_referrals"] = len(referred_users)
-    allowed = 1 + user["valid_referral_count"]
+    allowed = INITIAL_ATTEMPTS + user["valid_referral_count"]
     user["allowed_attempts"] = allowed
     user["attempts_remaining"] = max(0, allowed - user.get("attempts_used", 0))
     # Cooldown
     cooldown_remaining = 0
-    if user.get("last_attempt_at"):
+    if user.get("last_attempt_at") and user.get("attempts_used", 0) >= allowed:
         last = datetime.fromisoformat(user["last_attempt_at"])
         elapsed = datetime.now(timezone.utc) - last
         remaining = timedelta(hours=COOLDOWN_HOURS) - elapsed
@@ -250,18 +251,20 @@ async def submit_test(inp: TestSubmitInput):
     if not user:
         raise HTTPException(404, "User not found")
 
-    # Check attempts (valid referral based)
+    # Three initial attempts are available; qualified referrals add one each.
     referred_users = await db.users.find(
         {"referred_by": user.get("referral_code")},
         {"_id": 0, "best_score": 1}
     ).to_list(500)
     valid_ref_count = sum(1 for r in referred_users if r.get("best_score", 0) >= REFERRAL_QUALIFY_SCORE)
-    allowed = 1 + valid_ref_count
+    allowed = INITIAL_ATTEMPTS + valid_ref_count
     if user.get("attempts_used", 0) >= allowed:
-        raise HTTPException(403, "No attempts remaining. Refer friends who score 30+ to unlock attempts.")
+        # After the initial/referral allowance, one attempt becomes available per cooldown.
+        if not user.get("last_attempt_at"):
+            raise HTTPException(403, "No attempts remaining. Try again after the cooldown.")
 
     # Check cooldown
-    if user.get("last_attempt_at"):
+    if user.get("last_attempt_at") and user.get("attempts_used", 0) >= allowed:
         last = datetime.fromisoformat(user["last_attempt_at"])
         elapsed = datetime.now(timezone.utc) - last
         if elapsed < timedelta(hours=COOLDOWN_HOURS):
@@ -327,6 +330,8 @@ async def leaderboard():
         scores = by_code.get(u.get("referral_code"), [])
         valid = sum(1 for s in scores if s >= REFERRAL_QUALIFY_SCORE)
         pending = sum(1 for s in scores if s < REFERRAL_QUALIFY_SCORE)
+        if valid == 0:
+            continue
         result.append({
             "wallet_address": u["wallet_address"],
             "twitter_username": u.get("twitter_username", ""),
@@ -350,6 +355,13 @@ async def admin_login(inp: AdminLoginInput):
 @api_router.get("/admin/users")
 async def admin_users(_: bool = Depends(check_admin_token)):
     users = await db.users.find({}, {"_id": 0}).sort("created_at", -1).to_list(2000)
+    referral_scores = {}
+    referred = await db.users.find({"referred_by": {"$exists": True}}, {"_id": 0, "referred_by": 1, "best_score": 1}).to_list(5000)
+    for item in referred:
+        if item.get("best_score", 0) >= REFERRAL_QUALIFY_SCORE:
+            referral_scores[item.get("referred_by")] = referral_scores.get(item.get("referred_by"), 0) + 1
+    for user in users:
+        user["valid_referrals"] = referral_scores.get(user.get("referral_code"), 0)
     return {"users": users}
 
 @api_router.get("/admin/questions")

@@ -49,8 +49,8 @@ def test_user_new_fields(s):
         assert f in u, f"missing {f}"
     assert u["valid_referral_count"] == 0
     assert u["pending_referral_count"] == 0
-    assert u["allowed_attempts"] == 1
-    assert u["attempts_remaining"] == 1
+    assert u["allowed_attempts"] == 3
+    assert u["attempts_remaining"] == 3
 
 
 # ---------- Referral scenario ----------
@@ -70,7 +70,7 @@ def test_referral_pending(s, referral_ctx):
     assert u["valid_referral_count"] == 0
     assert u["pending_referral_count"] == 1
     assert u["total_referrals"] == 1
-    assert u["allowed_attempts"] == 1
+    assert u["allowed_attempts"] == 3
 
 
 def test_referrals_endpoint_pending(s, referral_ctx):
@@ -115,11 +115,11 @@ def test_referral_qualifies_after_score(s, referral_ctx):
     data = r.json()
     assert data["score"] >= 30
 
-    # Now User A should have valid_referral_count=1, allowed_attempts=2
+    # Now User A should have valid_referral_count=1, allowed_attempts=4
     ra = s.get(f"{API}/user/{referral_ctx['wa']}").json()["user"]
     assert ra["valid_referral_count"] == 1
     assert ra["pending_referral_count"] == 0
-    assert ra["allowed_attempts"] == 2
+    assert ra["allowed_attempts"] == 4
 
     # /referrals shows qualified
     ref = s.get(f"{API}/referrals/{referral_ctx['wa']}").json()["referrals"][0]
@@ -129,16 +129,17 @@ def test_referral_qualifies_after_score(s, referral_ctx):
 
 # ---------- Attempts gating ----------
 def test_submit_403_when_no_attempts(s):
-    """Fresh user: 1 attempt, use it, second submit blocked by cooldown 429 OR 403 based on order."""
+    """Fresh user: 3 initial attempts, then the cooldown controls the next attempt."""
     w = rand_wallet()
     s.post(f"{API}/register", json={"wallet_address": w, "twitter_username": "TEST_att_" + secrets.token_hex(3)})
     q = s.get(f"{API}/questions").json()["questions"]
     answers = {qq["id"]: 0 for qq in q}
     r1 = s.post(f"{API}/test/submit", json={"wallet_address": w, "answers": answers})
     assert r1.status_code == 200
-    r2 = s.post(f"{API}/test/submit", json={"wallet_address": w, "answers": answers})
-    # Cooldown 429 fires first before attempts check (implementation-dependent). Accept 403 or 429.
-    assert r2.status_code in (403, 429), r2.text
+    assert s.post(f"{API}/test/submit", json={"wallet_address": w, "answers": answers}).status_code == 200
+    assert s.post(f"{API}/test/submit", json={"wallet_address": w, "answers": answers}).status_code == 200
+    r4 = s.post(f"{API}/test/submit", json={"wallet_address": w, "answers": answers})
+    assert r4.status_code == 429, r4.text
 
 
 # ---------- Leaderboard sort ----------

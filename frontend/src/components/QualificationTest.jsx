@@ -49,7 +49,7 @@ export default function QualificationTest({ onOpenAuth }) {
       toast.error(`Cooldown active. Wait ${formatCooldown(userInfo.cooldown_seconds)}.`);
       return;
     }
-    if (userInfo?.attempts_remaining <= 0) {
+    if (userInfo?.attempts_remaining <= 0 && userInfo?.cooldown_seconds > 0) {
       toast.error("No attempts remaining. Refer friends to unlock more.");
       return;
     }
@@ -102,7 +102,7 @@ export default function QualificationTest({ onOpenAuth }) {
                 <div>
                   <div className="font-mono-cyber text-[10px] uppercase tracking-[0.3em] text-[#00f0ff]">Attempts Used</div>
                   <div className="mt-2 font-heading text-4xl font-bold">
-                    {userInfo?.attempts_used ?? 0}/<span className="text-slate-500">{userInfo?.allowed_attempts ?? 1}</span>
+                    {userInfo?.attempts_used ?? 0}/<span className="text-slate-500">{userInfo?.allowed_attempts ?? 3}</span>
                   </div>
                 </div>
                 <div>
@@ -140,7 +140,8 @@ export default function QualificationTest({ onOpenAuth }) {
                 <li>» 15 questions total</li>
                 <li>» 100 points max</li>
                 <li>» 70+ = WL slot</li>
-                <li>» 24h cooldown between tries</li>
+                <li>» 3 initial attempts</li>
+                <li>» 1 daily attempt after that</li>
                 <li>» +1 attempt per referral</li>
               </ul>
             </div>

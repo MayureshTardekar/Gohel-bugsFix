@@ -59,7 +59,7 @@ export default function Leaderboard() {
               </div>
               <div className="col-span-3 font-mono-cyber text-xs text-slate-400 truncate">@{r.twitter_username}</div>
               <div className="col-span-2 text-right font-heading text-lg font-bold text-[#00f0ff]">
-                {r.referral_count}
+                {r.valid_referrals}
               </div>
               <div className="col-span-2 text-right font-heading text-lg font-bold text-[#00ff66]">
                 {r.best_score}

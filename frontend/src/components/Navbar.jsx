@@ -120,6 +120,21 @@ export default function Navbar({ onOpenAuth }) {
               {l.label}
             </NavLink>
           ))}
+          {user ? (
+            <button
+              type="button"
+              onClick={() => {
+                signOut();
+                setMobileOpen(false);
+                nav("/");
+              }}
+              data-testid="mobile-menu-signout"
+              className="flex w-full items-center gap-3 px-6 py-4 text-left text-sm font-mono-cyber uppercase tracking-widest text-[#ff6b6b] border-b border-[#1b2234]"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign out
+            </button>
+          ) : null}
         </div>
       )}
     </header>
