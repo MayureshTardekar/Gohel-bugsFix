@@ -76,6 +76,12 @@ export default function LeaderboardPage() {
         })}
       </div>
 
+      {user && myIndex !== -1 && (
+        <div className="mt-6 cyber-corners p-4 border border-[#00ff66]/40 bg-[#00ff66]/5 font-mono-cyber text-xs uppercase tracking-widest text-[#00ff66] flex justify-between items-center">
+          <span>Your rank: #{myIndex + 1}</span>
+          <span>Score: {rows[myIndex].best_score} · Valid Refs: {rows[myIndex].valid_referrals}</span>
+        </div>
+      )}
       {user && myIndex === -1 && (
         <div className="mt-6 cyber-corners p-4 border border-[#1b2234] bg-[#0d1017]/70 font-mono-cyber text-xs uppercase tracking-widest text-slate-400">
           Your rank: pending · complete a quest to appear on the leaderboard

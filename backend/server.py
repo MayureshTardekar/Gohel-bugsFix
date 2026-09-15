@@ -330,7 +330,7 @@ async def leaderboard():
         scores = by_code.get(u.get("referral_code"), [])
         valid = sum(1 for s in scores if s >= REFERRAL_QUALIFY_SCORE)
         pending = sum(1 for s in scores if s < REFERRAL_QUALIFY_SCORE)
-        if valid == 0:
+        if valid == 0 and u.get("best_score", 0) == 0 and u.get("attempts_used", 0) == 0:
             continue
         result.append({
             "wallet_address": u["wallet_address"],
@@ -341,7 +341,7 @@ async def leaderboard():
             "attempts_used": u.get("attempts_used", 0),
             "qualified_wl": u.get("qualified_wl", False),
         })
-    result.sort(key=lambda x: (-x["valid_referrals"], -x["best_score"]))
+    result.sort(key=lambda x: (-x["valid_referrals"], -x["best_score"], x["attempts_used"]))
     return {"leaderboard": result[:100]}
 
 # ==================== Admin Endpoints ====================

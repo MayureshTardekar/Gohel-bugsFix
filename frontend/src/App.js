@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "sonner";
 import "@/App.css";
 import { UserProvider } from "@/context/UserContext";
@@ -31,7 +31,7 @@ function App() {
         <Routes>
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/archive" element={<Archive />} />
+            <Route path="/archive" element={<Navigate to="/collection" replace />} />
             <Route path="/collection" element={<Collection />} />
             <Route path="/quests" element={<Quests />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />

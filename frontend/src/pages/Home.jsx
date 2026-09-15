@@ -75,7 +75,7 @@ export default function Home() {
               transition={{ duration: 1, delay: 0.2 }}
               className="mb-8"
             >
-              <span className="coord-label text-[#00f0ff]">Osteon · A Digital Anatomy Archive</span>
+              <span className="coord-label text-[#00f0ff]">Osteon · A Digital Anatomy Collection</span>
             </motion.div>
 
             <h1 className="font-editorial text-[3.2rem] sm:text-[5rem] lg:text-[6.5rem] font-light text-white leading-[0.95] tracking-[-0.02em]">
@@ -116,20 +116,24 @@ export default function Home() {
               className="mt-12 flex flex-wrap gap-4"
             >
               <Link
-                to="/quests"
+                to="/collection"
                 data-testid="hero-cta-enter"
                 className="group inline-flex items-center rounded-none clip-notch bg-[#00f0ff] hover:bg-[#00f0ff]/90 text-black font-mono-cyber uppercase tracking-widest text-xs px-8 h-14"
               >
-                Enter the Archive
+                Enter the Collection
                 <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
               </Link>
-              <Link
-                to="/archive"
-                data-testid="hero-cta-archive"
+              <button
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById("skeleton-visual");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+                data-testid="hero-cta-skeleton"
                 className="inline-flex items-center gap-2 px-8 h-14 border border-white/20 hover:border-white/60 clip-notch bg-transparent font-mono-cyber uppercase tracking-widest text-xs text-white"
               >
                 Watch the Skeleton
-              </Link>
+              </button>
             </motion.div>
 
             <motion.div
@@ -153,7 +157,7 @@ export default function Home() {
           </div>
 
           {/* Skeleton visual */}
-          <div className="lg:col-span-5 relative">
+          <div id="skeleton-visual" className="lg:col-span-5 relative">
             <motion.div
               initial={{ opacity: 0, scale: 0.96, y: 40 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -309,10 +313,10 @@ export default function Home() {
                 axial and appendicular skeleton. This is not decoration; it is the exact blueprint of the human body.
               </p>
               <Link
-                to="/archive"
+                to="/collection"
                 className="mt-8 inline-flex items-center coord-label text-white hover:text-[#00f0ff] group"
               >
-                Open the Archive
+                Open the Collection
                 <ArrowRight className="w-3 h-3 ml-2 transition-transform group-hover:translate-x-1" />
               </Link>
             </SlideIn>
@@ -358,7 +362,7 @@ export default function Home() {
                 </div>
                 <div className="w-8 h-px bg-white/20" />
                 <div>
-                  <div className="font-editorial text-4xl font-light text-white">6</div>
+                  <div className="font-editorial text-4xl font-light text-white">5</div>
                   <div className="coord-label mt-1">rarity tiers</div>
                 </div>
                 <div className="w-8 h-px bg-white/20" />

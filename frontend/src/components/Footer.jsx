@@ -18,13 +18,12 @@ export default function Footer() {
             </div>
           </div>
           <p className="mt-6 text-sm text-slate-400 max-w-md leading-relaxed">
-            A digital archive of the human skeleton. Every bone becomes an on-chain specimen.
+            A digital collection of the human skeleton. Every bone becomes an on-chain specimen.
           </p>
         </div>
         <div>
           <div className="font-mono-cyber text-[10px] uppercase tracking-[0.35em] text-[#00f0ff] mb-4">Explore</div>
           <div className="space-y-2 text-sm">
-            <NavLink to="/archive" className="block text-slate-300 hover:text-[#00f0ff]">Archive</NavLink>
             <NavLink to="/collection" className="block text-slate-300 hover:text-[#00f0ff]">Collection</NavLink>
             <NavLink to="/quests" className="block text-slate-300 hover:text-[#00f0ff]">Quests</NavLink>
             <NavLink to="/leaderboard" className="block text-slate-300 hover:text-[#00f0ff]">Leaderboard</NavLink>

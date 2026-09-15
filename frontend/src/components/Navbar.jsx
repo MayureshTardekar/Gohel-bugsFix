@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const LINKS = [
-  { to: "/archive", label: "Archive" },
   { to: "/collection", label: "Collection" },
   { to: "/quests", label: "Quests" },
   { to: "/leaderboard", label: "Leaderboard" },
@@ -37,7 +36,7 @@ export default function Navbar({ onOpenAuth }) {
           </div>
           <div className="leading-none">
             <div className="font-heading text-xl font-bold tracking-[0.15em] text-white">OSTEON</div>
-            <div className="font-mono-cyber text-[10px] uppercase tracking-[0.3em] text-[#00f0ff]">206 BONES · DIGITAL ARCHIVE</div>
+            <div className="font-mono-cyber text-[10px] uppercase tracking-[0.3em] text-[#00f0ff]">206 BONES · DIGITAL COLLECTION</div>
           </div>
         </NavLink>
         <nav className="hidden lg:flex items-center gap-1">
