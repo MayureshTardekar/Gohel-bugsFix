@@ -124,7 +124,7 @@ export default function Home() {
               {[
                 { v: "206", l: "Bones" },
                 { v: "2,060", l: "Editions" },
-                { v: "8", l: "Worlds" },
+                { v: "10", l: "Worlds" },
               ].map((s, i) => (
                 <div key={s.l} className="flex items-baseline gap-3">
                   <div className="font-editorial text-3xl sm:text-4xl font-light text-white">{s.v}</div>
@@ -232,15 +232,15 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Scroll cue */}
-        <motion.div
+        {/* Scroll cue (commented out to avoid clash with skeleton) */}
+        {/* <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 z-10"
         >
           <span className="coord-label">Scroll · Descend</span>
           <ChevronDown className="w-4 h-4" />
-        </motion.div>
+        </motion.div> */}
       </section>
 
       {/* ==================== EDITORIAL PROLOGUE ==================== */}
@@ -288,7 +288,7 @@ export default function Home() {
             </SlideIn>
             <SlideIn from="right" delay={0.15} className="lg:col-span-6 lg:col-start-7">
               <p className="text-slate-400 text-base sm:text-lg leading-[1.9] font-editorial italic font-light">
-                Each bone is documented, illustrated, and classified — organized across eight anatomical worlds of the
+                Each bone is documented, illustrated, and classified — organized across ten anatomical worlds of the
                 axial and appendicular skeleton. This is not decoration; it is the exact blueprint of the human body.
               </p>
             </SlideIn>
