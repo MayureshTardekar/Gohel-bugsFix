@@ -13,11 +13,13 @@ const POSES = [
 
 const REGIONS = [
   { name: "Skull", count: 22, parent: "Axial", coord: "22 · CRANIAL VAULT" },
+  { name: "Middle Ear + Neck", count: 7, parent: "Axial", coord: "07 · EAR BONES + HYOID" },
   { name: "Vertebral Column", count: 26, parent: "Axial", coord: "26 · SPINAL AXIS" },
   { name: "Thoracic Cage", count: 25, parent: "Axial", coord: "25 · RIBS + STERNUM" },
   { name: "Upper Limbs", count: 60, parent: "Appendicular", coord: "60 · ARMS + HANDS" },
-  { name: "Lower Limbs", count: 60, parent: "Appendicular", coord: "60 · LEGS + FEET" },
+  { name: "Shoulder Girdle", count: 4, parent: "Appendicular", coord: "04 · CLAVICLE + SCAPULA" },
   { name: "Pelvic Girdle", count: 2, parent: "Appendicular", coord: "02 · HIP CRADLE" },
+  { name: "Lower Limbs", count: 60, parent: "Appendicular", coord: "60 · LEGS + FEET" },
 ];
 
 const STEPS = [
@@ -122,7 +124,7 @@ export default function Home() {
               {[
                 { v: "206", l: "Bones" },
                 { v: "2,060", l: "Editions" },
-                { v: "10", l: "Regions" },
+                { v: "8", l: "Worlds" },
               ].map((s, i) => (
                 <div key={s.l} className="flex items-baseline gap-3">
                   <div className="font-editorial text-3xl sm:text-4xl font-light text-white">{s.v}</div>
@@ -278,7 +280,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           <div className="grid lg:grid-cols-12 gap-10 items-start mb-16">
             <SlideIn from="left" className="lg:col-span-5">
-              <div className="coord-label text-[#00f0ff] mb-6">— Chapter I · The Archive —</div>
+              <div className="coord-label text-[#00f0ff] mb-6">— Chapter I · The Beginning —</div>
               <h2 className="font-editorial text-4xl sm:text-5xl lg:text-6xl font-light text-white leading-[1.05] tracking-[-0.01em]">
                 Two hundred <br />
                 and <span className="italic text-[#00ff66]">six</span> specimens.
@@ -286,16 +288,9 @@ export default function Home() {
             </SlideIn>
             <SlideIn from="right" delay={0.15} className="lg:col-span-6 lg:col-start-7">
               <p className="text-slate-400 text-base sm:text-lg leading-[1.9] font-editorial italic font-light">
-                Each bone is documented, illustrated, and classified — organized across ten anatomical regions of the
+                Each bone is documented, illustrated, and classified — organized across eight anatomical worlds of the
                 axial and appendicular skeleton. This is not decoration; it is the exact blueprint of the human body.
               </p>
-              <Link
-                to="/collection"
-                className="mt-8 inline-flex items-center coord-label text-white hover:text-[#00f0ff] group"
-              >
-                Open the Collection
-                <ArrowRight className="w-3 h-3 ml-2 transition-transform group-hover:translate-x-1" />
-              </Link>
             </SlideIn>
           </div>
 

@@ -32,8 +32,7 @@ export default function Footer() {
         <div>
           <div className="font-mono-cyber text-[10px] uppercase tracking-[0.35em] text-[#00f0ff] mb-4">Network</div>
           <div className="space-y-2 text-sm">
-            <a href="https://twitter.com" target="_blank" rel="noreferrer" className="block text-slate-300 hover:text-[#00f0ff]">X / Twitter</a>
-            <a href="#" className="block text-slate-300 hover:text-[#00f0ff]">Discord</a>
+            <a href="https://x.com/OsteonNFT" target="_blank" rel="noreferrer" className="block text-slate-300 hover:text-[#00f0ff]">X / Twitter</a>
             <a href="#" className="block text-slate-300 hover:text-[#00f0ff]">Documentation</a>
             <NavLink to="/admin" data-testid="footer-admin-link" className="block text-slate-500 hover:text-[#00f0ff]">Admin</NavLink>
           </div>
