@@ -56,27 +56,8 @@ export default function Home() {
           <div className="absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full bg-[#00ff66]/5 blur-[130px]" />
         </motion.div>
 
-        {/* Top coordinate strip */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.6, duration: 1 }}
-          className="absolute top-6 left-0 right-0 flex justify-between px-6 sm:px-12 z-20"
-        >
-          <span className="coord-label">51°30' N · 00°07' W · LONDON ANATOMY LAB</span>
-          <span className="coord-label hidden sm:block">SPECIMEN CATALOG · V.1.0</span>
-        </motion.div>
-
         <div className="relative max-w-7xl mx-auto px-4 sm:px-8 w-full grid lg:grid-cols-12 gap-10 items-center">
           <div className="lg:col-span-7 relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
-              className="mb-8"
-            >
-              <span className="coord-label text-[#00f0ff]">Osteon · A Digital Anatomy Collection</span>
-            </motion.div>
 
             <h1 className="font-editorial text-[3.2rem] sm:text-[5rem] lg:text-[6.5rem] font-light text-white leading-[0.95] tracking-[-0.02em]">
               {[
