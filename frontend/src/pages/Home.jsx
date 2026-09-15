@@ -97,24 +97,20 @@ export default function Home() {
               className="mt-12 flex flex-wrap gap-4"
             >
               <Link
-                to="/collection"
+                to="/quests"
                 data-testid="hero-cta-enter"
                 className="group inline-flex items-center rounded-none clip-notch bg-[#00f0ff] hover:bg-[#00f0ff]/90 text-black font-mono-cyber uppercase tracking-widest text-xs px-8 h-14"
               >
-                Enter the Collection
+                Enter the Quest
                 <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
               </Link>
-              <button
-                type="button"
-                onClick={() => {
-                  const el = document.getElementById("skeleton-visual");
-                  if (el) el.scrollIntoView({ behavior: "smooth" });
-                }}
-                data-testid="hero-cta-skeleton"
+              <Link
+                to="/collection"
+                data-testid="hero-cta-collection"
                 className="inline-flex items-center gap-2 px-8 h-14 border border-white/20 hover:border-white/60 clip-notch bg-transparent font-mono-cyber uppercase tracking-widest text-xs text-white"
               >
-                Watch the Skeleton
-              </button>
+                View the Collection
+              </Link>
             </motion.div>
 
             <motion.div
@@ -185,8 +181,8 @@ export default function Home() {
                 />
               </div>
 
-              {/* Specimen tag */}
-              <motion.div
+              {/* Specimen tag (commented out) */}
+              {/* <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 2.6, duration: 1 }}
@@ -194,10 +190,10 @@ export default function Home() {
               >
                 <div className="coord-label text-[#00f0ff]">{pose.label}</div>
                 <div className="coord-label">206 / 206</div>
-              </motion.div>
+              </motion.div> */}
 
-              {/* Floating specimen labels */}
-              <motion.div
+              {/* Floating specimen labels (commented out) */}
+              {/* <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.8, duration: 1 }}
@@ -229,7 +225,7 @@ export default function Home() {
                 <div className="px-3 py-1.5 bg-[#0d1017]/90 border border-[#ffb703]/50 clip-notch backdrop-blur">
                   <div className="coord-label text-[#ffb703]">FEMUR · L4 · 45CM AVG</div>
                 </div>
-              </motion.div>
+              </motion.div> */}
             </motion.div>
           </div>
         </div>
