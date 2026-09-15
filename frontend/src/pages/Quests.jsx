@@ -16,6 +16,8 @@ const POSES = [
   { src: "/skeletons/skeleton_contrapposto.png", label: "SPEC-042 · CONTRAPPOSTO" },
   { src: "/skeletons/skeleton_thinker.png", label: "SPEC-108 · CONTEMPLATIO" },
   { src: "/skeletons/skeleton_reaching.png", label: "SPEC-176 · ASCENSIO" },
+  { src: "/skeletons/skeleton_cyber_neutral.png", label: "SPEC-206 · ELEMENTAL PRIMORDIA" },
+  { src: "/skeletons/skeleton_cyber_ascensio.png", label: "SPEC-206 · CYBER ASCENSIO" },
 ];
 
 function ConnectSkeleton() {

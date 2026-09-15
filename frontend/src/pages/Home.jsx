@@ -9,6 +9,8 @@ const POSES = [
   { src: "/skeletons/skeleton_contrapposto.png", label: "SPECIMEN 042 · CONTRAPPOSTO" },
   { src: "/skeletons/skeleton_thinker.png", label: "SPECIMEN 108 · CONTEMPLATIO" },
   { src: "/skeletons/skeleton_reaching.png", label: "SPECIMEN 176 · ASCENSIO" },
+  { src: "/skeletons/skeleton_cyber_neutral.png", label: "SPECIMEN 206 · ELEMENTAL PRIMORDIA" },
+  { src: "/skeletons/skeleton_cyber_ascensio.png", label: "SPECIMEN 206 · CYBER ASCENSIO" },
 ];
 
 const REGIONS = [
